@@ -1,14 +1,8 @@
-# Base COVID19
-
-![alt text](https://base-covid19.pt/img/banner.jpg "Base COVID19")
-
-Monitorização da contratação pública que refere keywords relacionadas com a COVID19
-
-Disponível em https://base-covid19.pt
+# Fatima telegram bot location
 
 License
 ----
-Copyright 2020
+Copyright 2022
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
