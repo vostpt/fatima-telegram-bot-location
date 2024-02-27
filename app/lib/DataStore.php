@@ -57,7 +57,7 @@ class DataStore
         }
     }
 
-    static public function get($page = 1, $sort = 'signingDateParsed', $limit = 9, $order = -1)
+    static public function get($page = 1, $sort = 'signingDateParsed', $limit = 9, $order = -1, $channelId = false)
     {
         $collection = self::connect()->data;
 
@@ -74,7 +74,7 @@ class DataStore
         return $collection->find([], $options);
     }
 
-    static public function getLastLocations()
+    static public function getLastLocations($channelId = false)
     {
         /*
          *
@@ -95,7 +95,11 @@ class DataStore
 
         $collection = self::connect()->data;
 
-        $pipeline = array(
+	if($channelId){
+	$pipeline = array(
+		array(
+			'$match' => ['message.chat.id' => $channelId]
+	    ),
             array(
                 '$group' => [
                     '_id' => '$message.from.username',
@@ -110,6 +114,23 @@ class DataStore
         );
 
 
+	} else {
+
+        $pipeline = array(
+            array(
+                '$group' => [
+                    '_id' => '$message.from.username',
+                    'doc' => [ '$last' => '$$ROOT']
+                ],
+            ),
+            array(
+                '$replaceRoot' => [
+                    'newRoot' => '$doc'
+                ]
+            )
+        );
+
+	}
         return $collection->aggregate($pipeline)->toArray();
     }
 }
