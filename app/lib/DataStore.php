@@ -25,6 +25,17 @@ class DataStore
     }
 
 
+    static public function saveReport($data)
+    {
+        $collection = self::connect()->reports;
+        $data->created = new \MongoDB\BSON\UTCDateTime();
+        $data->updated = new \MongoDB\BSON\UTCDateTime();
+
+        $return = $collection->insertOne($data);
+
+        return $return;
+    }
+    
     static public function save($data)
     {
         $collection = self::connect()->data;
@@ -73,7 +84,27 @@ class DataStore
 
         return $collection->find([], $options);
     }
+    
+    static public function getReports($page = 1, $sort = 'created', $limit = 9, $order = -1)
+    {
+        $collection = self::connect()->reports;
 
+        $skip = $page === 1 ? 0 : $page * $limit;
+
+        $options = array(
+            'sort' => array(
+                $sort => $order
+            ),
+            'limit' => $limit,
+            'skip' => $skip
+        );
+
+	$options = [];
+
+
+        return $collection->find([], $options)->toArray();
+    }
+    
     static public function getLastLocations($channelId = false)
     {
         /*

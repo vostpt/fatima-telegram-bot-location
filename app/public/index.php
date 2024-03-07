@@ -13,5 +13,9 @@ Route::add('/api/webhook', function() {
 Route::add('/api/get', function() {
     include '../API/get.php';
 });
+Route::add('/api/get/reports', function() {
+    include '../API/getReports.php';
+});
+
 
 Route::run('/');
